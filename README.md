@@ -7,11 +7,13 @@ Intially coded in Java and now converting them over to C++ 11.
 
 Completed
 ========================
+
 *Queues
 *Single Linked List
 
 To-Do
 ========================
+
 *Doubly Linked List
 *Stacks
 *Binary Search Tree
