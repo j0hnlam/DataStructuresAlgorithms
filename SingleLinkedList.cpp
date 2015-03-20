@@ -9,143 +9,114 @@ C++
 
 using namespace std;
 
-class Node {//Node class
-	int number;
-	Node* next;
+class List {
 
-	public:
-		Node () {};
-		void setNumber (int aNumber) { number = aNumber; };
-		void setNext (Node* aNext) {next = aNext; };
-		int Number () { return number; };
-		Node* Next () {return next; };  
+  private:
+    typedef struct node {
+
+      int data;
+      node* next;
+
+    }*nodePtr;
+
+    nodePtr head;
+    nodePtr current;
+    nodePtr tmp;
+
+  public: //function prototypes
+    List ();
+    void Add (int addNumber);
+    void Delete (int deleteNumber);
+    void deleteDupe ();
+    void Print ();
 };
 
-class List { //List Class
-    Node *head;
-  public:
-    List() { head = NULL; };
-    void Print();
-    void Add(int Number);
-    void Delete(int Number);
-};
-
-void List::Print() {
-
-    // Temp pointer
-    Node *tmp = head;
-
-    // No nodes
-    if ( tmp == NULL ) {
-    cout << "EMPTY" << endl;
-    return;
-    }
-
-    // One node in the list
-    if ( tmp->Next() == NULL ) {
-    cout << tmp->Number();
-    cout << " --> ";
-    cout << "NULL" << endl;
-    }
-    else {
-    // Parse and print the list
-    do {
-        cout << tmp->Number();
-        cout << " --> ";
-        tmp = tmp->Next();
-    }
-    while ( tmp != NULL );
-
-    cout << "NULL" << endl;
-    }
+List::List (){
+  head = NULL;
+  current = NULL;
+  tmp = NULL;
 }
 
+void List::Add(int addNumber){
+  nodePtr n = new node;
+  n->next = NULL;
+  n->data = addNumber;
 
- //Add a node to the linked list
-void List::Add(int Number) {
-
-    // Create a new node
-    Node* newNode = new Node();
-    newNode->setNumber(Number);
-    newNode->setNext(NULL);
-
-    // Create a temp pointer
-    Node *tmp = head;
-
-    if ( tmp != NULL ) {
-    // Nodes already present in the list
-    // Parse to end of list
-    while ( tmp->Next() != NULL ) {
-        tmp = tmp->Next();
+  if (head != NULL){
+    current = head;
+    while (current->next  != NULL){
+      current = current->next;
     }
-
-    // Point the last node to the new node
-    tmp->setNext(newNode);
-    }
-    else {
-    // First node in the list
-    head = newNode;
-    }
+    current->next = n;
+  }
+  else{
+    head = n;
+  }
 }
 
-//Delete a node from the list
-void List::Delete(int Number) {
+void List::Delete(int deleteNumber){
+  nodePtr delPtr = NULL;
+  tmp = head;
+  current = head;
 
-    // Create a temp pointer
-    Node *tmp = head;
+  while (current != NULL && current->data != deleteNumber){
+    tmp = current;
+    current = current->next; //current advances 1 more than tmp
+  }
+  if (current == NULL){
+    cout << deleteNumber << " was not in the list.\n" << endl;
+    delete delPtr;
+  }
+  else{
+    delPtr = current;
+    current = current->next;
+    tmp->next = current;
+    if (delPtr == head){
+      head = head->next;
+      tmp = NULL;
+    }
+    delete delPtr;
+    cout << "The value of " << deleteNumber << " was deleted.\n" << endl;
+  }
+}
 
-    // No nodes
-    if ( tmp == NULL )
+void List::Print (){
+  current = head;
+  while (current != NULL){
+    cout << current->data << endl;
+    current = current->next;
+  }
+}
+
+void List::deleteDupe (){
+  if (head == NULL)
     return;
 
-    // Last node of the list
-    if ( tmp->Next() == NULL ) {
-    delete tmp;
-    head = NULL;
-    }
-    else {
-    // Parse thru the nodes
-    Node *prev;
-    do {
-        if ( tmp->Number() == Number ) break;
-        prev = tmp;
-        tmp = tmp->Next();
-    } while ( tmp != NULL );
+  current = head;
 
-    // Adjust the pointers
-    prev->setNext(tmp->Next());
-
-    // Delete the current node
-    delete tmp;
+  while (current != NULL){
+      tmp = current;
+    while (tmp->next != NULL){
+      if (tmp->next->data == current->data){
+        tmp->next = tmp->next->next;
+      }
+      else{
+        tmp = tmp->next;
+      }
     }
+  }
 }
 
 int main (){
+  List list;
 
-	List list; //create new list
+  list.Add (3);
+  list.Add (5);
+  list.Add (8);
+  list.Add (5);
+  list.Print ();
 
-	//Add to list
-	list.Add (100);
-	list.Print ();
-	list.Add(200);
-  list.Print();
-  list.Add(300);
-  list.Print();
-  list.Add(400);
-  list.Print();
-  list.Add(500);
-  list.Print();
+  list.deleteDupe();
+  list.Print ();
 
-  //Delete from list
-  list.Delete(400);
-  list.Print();
-  list.Delete(300);
-  list.Print();
-  list.Delete(200);
-  list.Print();
-  list.Delete(500);
-  list.Print();
-  list.Delete(100);
-  list.Print();
-    
 }
