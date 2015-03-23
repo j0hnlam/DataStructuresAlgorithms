@@ -11,10 +11,10 @@ Completed
 * Queues
 * Single Linked List
 * Stacks
+* Binary Search Tree
 
 To-Do
 ========================
 
 * Doubly Linked List
-* Binary Search Tree
 * Heap
